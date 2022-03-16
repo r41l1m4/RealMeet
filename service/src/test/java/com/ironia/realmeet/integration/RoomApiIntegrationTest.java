@@ -6,7 +6,6 @@ import static com.ironia.realmeet.utils.TestDataCreator.newRoomBuilder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.ironia.realmeet.api.facade.RoomApi;
-import com.ironia.realmeet.api.model.CreateRoomDTO;
 import com.ironia.realmeet.core.BaseIntegrationTest;
 import com.ironia.realmeet.domain.repository.RoomRepository;
 import org.junit.jupiter.api.Test;
