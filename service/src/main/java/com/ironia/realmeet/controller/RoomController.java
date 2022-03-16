@@ -3,6 +3,7 @@ package com.ironia.realmeet.controller;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import com.ironia.realmeet.api.facade.RoomsApi;
+import com.ironia.realmeet.api.model.CreateRoomDTO;
 import com.ironia.realmeet.api.model.RoomDTO;
 import com.ironia.realmeet.service.RoomService;
 import com.ironia.realmeet.util.ResponseEntityUtils;
@@ -24,5 +25,10 @@ public class RoomController implements RoomsApi {
     @Override
     public CompletableFuture<ResponseEntity<RoomDTO>> getRoom(Long id) {
         return supplyAsync(() -> roomService.getRoom(id), controllersExecutor).thenApply(ResponseEntityUtils::ok);
+    }
+
+    @Override
+    public CompletableFuture<ResponseEntity<RoomDTO>> createRoom(CreateRoomDTO createRoomDTO) {
+        return supplyAsync(() -> roomService.createRoom(createRoomDTO), controllersExecutor).thenApply(ResponseEntityUtils::created);
     }
 }
