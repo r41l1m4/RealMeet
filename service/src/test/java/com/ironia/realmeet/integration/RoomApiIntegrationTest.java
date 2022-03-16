@@ -1,10 +1,12 @@
 package com.ironia.realmeet.integration;
 
 import static com.ironia.realmeet.utils.TestConstants.*;
+import static com.ironia.realmeet.utils.TestDataCreator.newCreateRoomDTO;
 import static com.ironia.realmeet.utils.TestDataCreator.newRoomBuilder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.ironia.realmeet.api.facade.RoomApi;
+import com.ironia.realmeet.api.model.CreateRoomDTO;
 import com.ironia.realmeet.core.BaseIntegrationTest;
 import com.ironia.realmeet.domain.repository.RoomRepository;
 import org.junit.jupiter.api.Test;
@@ -51,5 +53,27 @@ class RoomApiIntegrationTest extends BaseIntegrationTest {
     @Test
     void testGetRoomDoesNotExist() {
         assertThrows(HttpClientErrorException.NotFound.class, () -> api.getRoom(DEFAULT_ROOM_ID));
+    }
+
+    @Test
+    void testCreateRoomSuccess() {
+        var createRoomDTO = newCreateRoomDTO();
+        var roomDTO = api.createRoom(createRoomDTO);
+
+        assertEquals(createRoomDTO.getName(), roomDTO.getName());
+        assertEquals(createRoomDTO.getSeats(), roomDTO.getSeats());
+        assertNotNull(roomDTO.getId());
+
+        var room = roomRepository.findById(roomDTO.getId()).orElseThrow();
+        assertEquals(roomDTO.getName(), room.getName());
+        assertEquals(roomDTO.getSeats(), room.getSeats());
+    }
+
+    @Test
+    void testCreateRoomValidationError() {
+        assertThrows(
+            HttpClientErrorException.UnprocessableEntity.class,
+            () -> api.createRoom(newCreateRoomDTO().name(null))
+        );
     }
 }
