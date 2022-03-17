@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import com.ironia.realmeet.api.model.CreateRoomDTO;
 import com.ironia.realmeet.api.model.RoomDTO;
+import com.ironia.realmeet.api.model.UpdateRoomDTO;
 import com.ironia.realmeet.domain.entity.Room;
 import com.ironia.realmeet.domain.repository.RoomRepository;
 import com.ironia.realmeet.exception.RoomNotFoundException;
@@ -41,6 +42,13 @@ public class RoomService {
     public void deleteRoom(Long roomId) {
         getActiveRoomOrThrow(roomId);
         roomRepository.deactivate(roomId);
+    }
+
+    @Transactional
+    public void updateRoom(Long roomId, UpdateRoomDTO updateRoomDTO) {
+        roomValidator.validate(roomId, updateRoomDTO);
+        getActiveRoomOrThrow(roomId);
+        roomRepository.updateRoom(roomId, updateRoomDTO.getName(), updateRoomDTO.getSeats());
     }
 
     private Room getActiveRoomOrThrow(Long id) {
