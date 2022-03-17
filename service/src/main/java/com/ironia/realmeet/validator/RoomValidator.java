@@ -65,7 +65,7 @@ public class RoomValidator {
             .findByNameAndActive(name, true)
             .ifPresent(
                 room -> {
-                    if (!isNull(roomIdToExclude) && !Objects.equals(room.getId(), roomIdToExclude)) {
+                    if (isNull(roomIdToExclude) || !Objects.equals(room.getId(), roomIdToExclude)) {
                         validationErrors.add(new ValidationError(ROOM_NAME, ROOM_NAME + DUPLICATE));
                     }
                 }
